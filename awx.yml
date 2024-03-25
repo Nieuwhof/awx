@@ -11,7 +11,7 @@
     - name: Create organization
       awx.awx.organization:  # Use full namespace for the module
         controller_host: 'http://myregistry.bertus.cloud:8080/'
-        controller_oauthtoken: 'iJIFs14evfjrEKfskqgXDnd5n0goEF'
+        controller_oauthtoken: "{{ set_token }}"
         state: present
         name: "{{ item.organization_name }}"  # Replace with your desired name
         description: 'This is a description for my organization'  # Optional
@@ -21,7 +21,7 @@
     - name: Create user
       awx.awx.user:
         controller_host: 'http://myregistry.bertus.cloud:8080/'
-        controller_oauthtoken: 'iJIFs14evfjrEKfskqgXDnd5n0goEF'
+        controller_oauthtoken: "{{ set_token }}"
         state: "{{ item.state }}"
         username: "{{ item.user_name }}"
         password: "{{ item.user_password }}"  # Assuming password is intended
