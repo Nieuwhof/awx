@@ -1,0 +1,34 @@
+- hosts: myregistry  # Use localhost for local actions
+  gather_facts: false
+  collections:
+    - awx.awx
+  vars_files:
+    - vars/ansible.yml
+  become: true  # Corrected indentation for become
+  become_user: root
+
+  tasks:
+    - name: Create organization
+      awx.awx.organization:  # Use full namespace for the module
+        controller_host: 'http://myregistry.bertus.cloud:8080/'
+        controller_oauthtoken: 'iJIFs14evfjrEKfskqgXDnd5n0goEF'
+        state: present
+        name: "{{ item.organization_name }}"  # Replace with your desired name
+        description: 'This is a description for my organization'  # Optional
+      loop: "{{ organizations }}"
+      register: result
+
+    - name: Create user
+      awx.awx.user:
+        controller_host: 'http://myregistry.bertus.cloud:8080/'
+        controller_oauthtoken: 'iJIFs14evfjrEKfskqgXDnd5n0goEF'
+        state: "{{ item.state }}"
+        username: "{{ item.user_name }}"
+        password: "{{ item.user_password }}"  # Assuming password is intended
+        email: "{{ item.user_email }}"
+        auditor: "{{ item.auditor }}"
+        superuser: "{{ item.superuser }}"
+      loop: "{{ users }}"
+      register: user_register
+
+
